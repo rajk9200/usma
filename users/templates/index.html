@@ -1,0 +1,23 @@
+
+{% extends 'base.html'%}
+
+{% block body%}
+
+<body>
+
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1>Hi, {{request.user.first_name}}!</h1>
+    <p>Welcome to <span class="text-primary">Usma Enterprise</span> </p>
+
+    <p>We are working on website development.</p>
+
+    <p><a href="/logout/">logout</a></p>
+  </div>
+</div>
+
+
+
+</body>
+{% endblock%}

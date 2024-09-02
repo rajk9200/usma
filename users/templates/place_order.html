@@ -1,0 +1,148 @@
+{% extends 'base2.html'%}
+{% block title %} HR Dashboard{% endblock%}
+{% block body %}
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    {% include "sidebar.html"%}
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+             {% include 'nav.html'%}
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid" id="MainDashboard">
+
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Place order </h1>
+                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                </div>
+
+                <!-- Content Row -->
+                <div class="card shadow mb-4">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>Order list</h4>
+                                <form method="post">
+                                    {%csrf_token%}
+                                    <select required id="id_customer" class="form-control" name="id_customer">
+                                        <option value="">Select Customer Name</option>
+                                        {%for c in customer_list%}
+                                        <option value="{{c.pk}}">{{c.first_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="order_listing my-4">
+                                        Order details
+                                        <table class="table">
+                                            <tbody id="CardList">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <input type="hidden" id="cardListing" name="cart_list" required>
+
+
+                                    <input id="total_Amount" name="total_amount" type="number" class="form-control my-2"
+                                           placeholder="Total Amount" required>
+
+                                    <select class="form-control mt-2" name="p_status" required>
+                                        <option value="">Select Payment Type</option>
+                                        <option value="pending">Pending</option>
+
+                                        <option value="paid">Paid</option>
+                                    </select>
+
+                                    <input type="number" class="form-control my-2" placeholder="Advance amount" value="0"
+                                           name="advance">
+
+
+                                    <input type="submit" class="btn btn-success">
+
+                                </form>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Content Row -->
+
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+         {% include 'footer.html'%}
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+
+{% endblock%}
+
+
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+   let cart = JSON.parse(localStorage.getItem('cart')) || [];
+const cartDataInput = document.getElementById('cardListing');
+
+// Ensure cartDataInput exists before setting its value
+if (cartDataInput) {
+    cartDataInput.value = JSON.stringify(cart); // Convert to JSON string
+}
+
+let total = 0;
+
+// Iterate through the cart array to calculate total and update the DOM
+cart.forEach(item => {
+    const itemTotal = item.price * item.qty; // Calculate total for each item
+    total += itemTotal; // Add the item's total to the cart total
+
+    $('#CardList').append(`
+        <tr style="font-size:14px">
+            <td><small> ${item.name}</small></td>
+            <td><small>${item.price} x ${item.qty}</small></td>
+            <td><small> ${itemTotal}</small></td>
+        </tr>
+    `);
+});
+
+// Update the total amount in the DOM
+$("#total_Amount").val(total);
+
+
+
+
+</script>
+
+
+{% endblock%}
