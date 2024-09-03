@@ -1,0 +1,76 @@
+
+<style>
+    .body{
+    font-family: "Courier";
+    font-size: 1rem;
+    font-weight: 400;
+
+    }
+    .table{
+        border: 1px solid #e3e6f0;
+
+
+
+    }
+    thead {
+
+}
+    tr {
+    padding:4px
+
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 4rem;
+
+}
+
+
+</style>
+<body>
+    <div class="container">
+        <img src="{{ logo_path }}" alt="Company Logo" width="100px" class="text-center">
+        <hr>
+        <h2>{{ company_name }}</h2>
+        <div class="invoice-header">
+            Contact: {{ mobile_number }} | Website: <a href="{{ website }}">{{ website }}</a>
+        </div>
+
+        <div class="invoice-details">
+            <h2>Invoice #: {{ invoice_no }}</h2>
+            <p>Date: {{ today }}<br>
+                Billed To: {{ order.user.first_name }} {{ order.user.last_name }}<br>
+                Email: {{ order.user.email }}<br>
+                Contact: {{ order.user.mobile }}</p>
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in products %}
+                <tr>
+                    <td>{{ i.product.product_name }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td>x {{ i.product.price }}</td>
+                    <td>{{ i.total }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total">
+                    <td colspan="3">Total</td>
+                    <td>Rs {{ order.amount }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            Thank you for your business!
+        </div>
+    </div>

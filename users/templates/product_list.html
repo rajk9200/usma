@@ -1,31 +1,28 @@
-{% for p in product_list %}
-<div class="col-md-3 mt-2">
-    <div class="card">
-        <div class="card-header">
-            <img src="/media/{{p.product_image}}" width="100px" height="140px">
-        </div>
-        <div class="card-body">
-            <small>{{p.product_name}}</small><br>
-            <small>Rs.: {{p.price}} </small> <small> {{p.weight}}g</small><br>
-            <small>{{p.p_desc | truncatewords:5 }}</small>
-        </div>
-        <div class="card-footer">
-            <table class="table">
-                <tr>
-                    <td><input type="number" class="form-control"
-                               style="width: 60px;" value="1" id="p_qty{{p.id}}"></td>
-                    <td>
-                        <button class="btn btn-success"
-                                onclick="getAddToCart('{{p.product_name}}','{{p.price}}','{{p.id}}')">Add+
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </div>
+<table class="m-3 table">
+    <tbody>
+    {% for p in product_list %}
 
-    </div>
-</div>
+    <tr>
+        <td><a href="/one_product/{{p.id}}"> {{p.product_name}}</a></td>
+        <td>{{p.weight}} g</td>
 
+        <td><input type="text" value="{{p.price}}" class="form-control"></td>
+
+
+        <td><input type="number" class="form-control"
+                   style="width: 60px;" value="1" id="p_qty{{p.id}}"></td>
+        <td>
+            <button class="btn btn-success"
+                    onclick="getAddToCart('{{p.product_name}}','{{p.price}}','{{p.id}}')">Add+
+            </button>
+        </td>
+
+
+    </tr>
+
+{% endfor %}
+    </tbody>
+</table>
 <script>
 
     function getAddToCart(p_name,price,pid){
@@ -38,4 +35,3 @@
         addToCart(pid, p_name, parseInt(price),parseInt(pqty));
     }
 </script>
-{% endfor %}

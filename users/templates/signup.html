@@ -1,4 +1,4 @@
-{% extends 'base.html'%}
+{% extends 'base2.html'%}
 
 {% block body%}
 <style>
@@ -17,7 +17,7 @@
 <body>
 
 <div class="container login-container">
-<div class="col-md-4 bg-light p-4 m-auto rounded">
+<div class="col-md-6 bg-light p-4 m-auto rounded">
     <h3 class="m-4 text-center">Register</h3>
     <form method="post">
         {% csrf_token %}
@@ -26,7 +26,7 @@
             <button type="submit" class="btn btn-success">Register</button>
         </div>
     </form>
-    <div class="my-2">Already account? <a href="/login">login</a>  here</div>
+    <div class="my-2">Already account? please <a href="/login">login</a>  here</div>
 
 </div>
 </div>

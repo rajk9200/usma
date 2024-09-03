@@ -20,7 +20,6 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomerUser(AbstractBaseUser, PermissionsMixin):
-
     email = models.EmailField(unique=True,blank=True,null=True)
     mobile = models.CharField(unique=True,max_length=10)
     first_name = models.CharField(max_length=30, blank=True)
@@ -44,7 +43,7 @@ class CustomerUser(AbstractBaseUser, PermissionsMixin):
 class Product(models.Model):
     id = models.CharField(max_length=12, primary_key=True, editable=False)
     product_name=models.CharField(max_length=100)
-    p_desc=models.TextField(max_length=100)
+    p_desc=models.TextField(max_length=100,verbose_name="Product Description")
     product_image=models.ImageField(upload_to="products",default="product.png")
     weight=models.IntegerField(default=0)
     price=models.DecimalField(max_digits=8,decimal_places=2)
@@ -105,9 +104,16 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE,related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
+    total = models.DecimalField(max_digits=8,decimal_places=2, default=0)
+
+
+    def save(self, *args, **kwargs):
+        if not self.total:
+            self.total = self.quantity * self.product.price
+        super(OrderItem, self).save(*args, **kwargs)
 
 
 

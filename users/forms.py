@@ -43,7 +43,7 @@ class LoginForm(forms.Form):
 class AddCustomerForm(forms.ModelForm):
     class Meta:
         model = CustomerUser
-        fields = ('mobile', 'first_name', 'last_name','address')
+        fields = ('mobile', 'first_name', 'last_name','email','address')
 
     def __init__(self, *args, **kwargs):
         super(AddCustomerForm, self).__init__(*args, **kwargs)

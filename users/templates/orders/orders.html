@@ -1,0 +1,136 @@
+{% extends 'base2.html'%}
+{% block title %} Usma | Orders {% endblock%}
+{% block body %}
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    {% include "sidebar.html"%}
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            {% include 'nav.html'%}
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid" id="MainDashboard">
+
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Orders</h1>
+                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                </div>
+
+                <!-- Content Row -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+
+                        <a href="/new_order/" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Place your order</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead class="text-primary">
+                                <th>#</th>
+                                <th>Order detail</th>
+                                <th>Customer detail</th>
+                                <th>Amount Status</th>
+
+                                <th>Description</th>
+                                <th>Invoice</th>
+
+                                </thead>
+
+                                <tbody>
+                                {% if orders_list %}
+                                    {% for ord in orders_list %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{ord.id}}
+                                    <br>
+                                        <small>{{ord.created_at}}</small>
+                                    </td>
+                                    <td><span class="text-primary">{{ord.user.first_name}} {{ord.user.last_name}}</span> <br>
+                                        <small class="text-muted">{{ord.user.mobile}} {{ord.user.address}}</small>
+                                    </td>
+                                    <td>Rs.{{ord.amount}}/ is {{ord.status}} </td>
+
+                                    <td>
+                                        {% for p in ord.products.all%}
+                                        <small>{{p.product_name}} {{p.weight}}g </small>,
+                                        {% endfor%}
+
+                                    </td>
+                                    <td>
+                                       <a href="/invoice/{{ord.id}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> download</a>
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center"><small class="text-center">Sorry! No orders found.</small></td>
+                                </tr>
+
+                                {% endif %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Content Row -->
+
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        {% include 'footer.html'%}
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+
+{% endblock%}
+
+
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    function loadOrders(search_key){
+    url ="http://127.0.0.1:8000//orders/?byuser="+search_key
+    console.log(url);
+    $("#EmpList").load(url);
+
+
+     }
+     //loadOrders(search_key="")
+</script>
+
+<script>
+    localStorage.removeItem('cart');
+</script>
+{% endblock%}

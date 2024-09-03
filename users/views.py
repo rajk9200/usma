@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate,login,logout
 from .models import CustomerUser,Product,Order,OrderItem
 import json
 
+
 def dashboard_view(request):
     context = {}
     if not request.user.is_authenticated:
@@ -20,7 +21,13 @@ def admin_dashboard(request):
         return redirect("/login")
     if not request.user.is_staff:
         return redirect('/')
-    return render(request,'admin_dashboard.html')
+    context={}
+    context['total_customer']=CustomerUser.objects.count()
+    context['total_product']=Product.objects.count()
+    context['total_order']=Order.objects.count()
+
+
+    return render(request,'admin_dashboard.html',context)
 
 
 def customers(request):
@@ -29,9 +36,13 @@ def customers(request):
         return redirect("/login")
     if not request.user.is_staff:
         return redirect('/')
+
     customer_list =CustomerUser.objects.filter().exclude(is_staff=True).order_by('-id')
+    search_key = request.GET.get('name')
+    if search_key:
+        customer_list.filter()
     context['customer_list']=customer_list
-    return render(request,'customers.html',context)
+    return render(request,'customers/customers.html',context)
 
 
 def orders(request):
@@ -40,10 +51,15 @@ def orders(request):
         return redirect("/login")
     if not request.user.is_staff:
         return redirect('/')
-    orders_list =Order.objects.filter().order_by('-id')
+    orders_list = Order.objects.filter().order_by('-id')
+    cus_id=request.GET.get('bycustomer')
+    if cus_id:
+        orders_list=orders_list.filter(user_id=cus_id)
+
+
     print(orders_list)
     context['orders_list']=orders_list
-    return render(request,'orders.html',context)
+    return render(request,'orders/orders.html',context)
 
 
 def products(request):
@@ -65,23 +81,9 @@ def new_order(request):
         return redirect('/')
     product_list =Product.objects.filter().order_by('-id')
     context['product_list']=product_list
-    return render(request,'new_order.html',context)
+    return render(request,'orders/new_order.html',context)
 
-def product_list(request):
-    context = {}
-    if not request.user.is_authenticated:
-        return redirect("/login")
-    if not request.user.is_staff:
-        return redirect('/')
-    product_list = Product.objects.filter().order_by('-id')
-    v_key =request.GET.get('v_key')
-    print(v_key)
-    if v_key:
-        product_list = product_list.filter(product_name__istartswith=v_key)
-    print(product_list)
 
-    context['product_list']=product_list
-    return render(request,'product_list.html',context)
 
 
 
@@ -210,3 +212,68 @@ def place_order(request):
 
 
     return render(request,'place_order.html',context)
+
+
+def generate_pdf(request):
+
+    return render(request,'data.html')
+
+
+
+
+def one_product(request,id):
+    context={}
+    one_data =Product.objects.get(id=id)
+    context['product']=one_data
+    return render(request,'one_products.html',context)
+
+
+
+
+
+def product_list(request):
+    context = {}
+    if not request.user.is_authenticated:
+        return redirect("/login")
+    if not request.user.is_staff:
+        return redirect('/')
+    product_list = Product.objects.filter().order_by('-id')
+    v_key =request.GET.get('v_key')
+    print(v_key)
+    if v_key:
+        product_list = product_list.filter(product_name__istartswith=v_key)
+    print(product_list)
+
+    context['product_list']=product_list
+    return render(request,'product_list.html',context)
+
+
+def order_list(request):
+    context = {}
+    orders_list = Order.objects.filter().order_by('-id')
+    context['orders_list'] = orders_list
+    return render(request, "orders/order_list.html",context)
+
+def customer_list(request):
+    context = {}
+    customers_list = CustomerUser.objects.filter(is_staff=False).order_by('-id')
+    v_key=request.GET.get('name')
+    print(v_key)
+    if v_key:
+        customers_list=customers_list.filter(first_name__istartswith=v_key)
+
+    context['customers_list'] = customers_list
+    return render(request, "customers/customer_list.html",context)
+
+
+def profile_view(request):
+    context = {}
+    customer = CustomerUser.objects.get(id=request.user.id)
+    user_id=request.GET.get('user')
+    if user_id:
+        customer = CustomerUser.objects.get(id=user_id)
+
+    context['user'] = customer
+    return render(request, "customers/profile.html",context)
+
+

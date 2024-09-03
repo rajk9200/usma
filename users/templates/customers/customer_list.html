@@ -1,0 +1,12 @@
+{% for cus in customers_list %}
+<tr>
+    <td>{{cus.id}}</td>
+    <td><span class="text-primary"><a href="/profile/?user={{cus.id}}">{{cus.first_name}}  {{cus.last_name}}</a></span> <br>
+        <small class="text-muted">{{cus.mobile}} {{cus.address}}</small>
+    </td>
+
+    <td><a href="/orders/?bycustomer={{cus.id}}">view</a></td>
+    <td><a href="#">view</a></td>
+
+</tr>
+{% endfor %}
