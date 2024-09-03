@@ -52,7 +52,7 @@
                                     {% for ord in orders_list %}
                                 <tr>
                                     <td>{{forloop.counter}}</td>
-                                    <td>{{ord.id}}
+                                    <td><a href="/one_order/{{ord.id}}">{{ord.id}}</a>
                                     <br>
                                         <small>{{ord.created_at}}</small>
                                     </td>

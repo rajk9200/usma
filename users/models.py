@@ -119,3 +119,43 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product}"
+
+
+from django.db import models
+from django.utils import timezone
+
+
+class Transaction(models.Model):
+    PAYMENT_METHODS = [
+        ('credit_card', 'Credit Card'),
+        ('debit_card', 'Debit Card'),
+        ('paypal', 'PayPal'),
+        ('bank_transfer', 'Bank Transfer'),
+        ('cash', 'Cash'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    ]
+
+    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='transactions')
+    transaction_id = models.CharField(max_length=100, unique=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount_remaining = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+    timestamp = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return f"Transaction {self.transaction_id} - Order {self.order.id}"
+
+
+
+
+
+
+

@@ -14,6 +14,7 @@ urlpatterns = [
     path('report/', generate_invoice, name='invoice'),
     path('d/', views.generate_pdf, name='d'),
     path('one_product/<id>', views.one_product),
+    path('one_order/<id>', views.one_order),
     path('products/', views.products),
     path('add_product/', views.add_product),
     path('add_customer/', views.add_customers),

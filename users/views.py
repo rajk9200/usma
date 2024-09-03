@@ -228,6 +228,26 @@ def one_product(request,id):
     return render(request,'one_products.html',context)
 
 
+def one_order(request,id):
+    context={}
+    print(id)
+    one_data =Order.objects.get(id=id)
+    context['order']=one_data
+    if request.method=="POST":
+        amount=request.POST.get('amount')
+        status=request.POST.get('status')
+        if amount:
+            one_data.amount=float(request.POST.get('amount'))
+        if status:
+            one_data.status = request.POST.get('status')
+        one_data.save()
+
+
+
+
+    return render(request,'orders/one_order.html',context)
+
+
 
 
 
@@ -272,6 +292,16 @@ def profile_view(request):
     user_id=request.GET.get('user')
     if user_id:
         customer = CustomerUser.objects.get(id=user_id)
+    if request.method=="POST":
+        email=request.POST.get('email')
+        first_name=request.POST.get('first_name')
+        last_name=request.POST.get('last_name')
+        address=request.POST.get('address')
+        print(email)
+        customer_user=CustomerUser.objects.filter(id=customer.id).update(
+            email=email,address=address,first_name=first_name,last_name=last_name)
+
+
 
     context['user'] = customer
     return render(request, "customers/profile.html",context)
