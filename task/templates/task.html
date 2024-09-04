@@ -1,0 +1,25 @@
+
+{% if tasks %}
+{% for t in tasks %}
+<div class="inputBox">
+    <h5 class="text-muted w-95 h-20 bg-body"><i>{{t.name}}</i></h5>
+    <button onclick="deleteTask('{{t.id}}')" class="btn btn-outline-danger right-icon" id="" title="{{t.id}}"><i class="fa fa-trash"></i></button>
+</div>
+{% endfor %}
+
+<script>
+    function deleteTask(getId){
+        path="/task_delete/"+getId
+        if (confirm('Are you sure want to delete?')) {
+                $.get( path, function( data ) {
+                        loadTasklist();
+                      alert( "Load was performed." );
+                    });
+            }
+        }
+</script>
+{% else %}
+ <div class="text-muted">No Task!</div>
+{% endif%}
+
+

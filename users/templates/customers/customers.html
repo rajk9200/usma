@@ -91,9 +91,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
 function loadCustomer(search_key){
-url ="http://127.0.0.1:8000/customer_list/?name="+search_key
+//url ="http://127.0.0.1:8000/customer_list/?name="+search_key
+
+    const basePath = window.location.origin;
+    const url = basePath + "/customer_list/?name=" + search_key;
 
 $("#customerList").load(url);
+
+
 
 
  }

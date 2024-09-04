@@ -121,8 +121,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     function loadOrders(search_key){
-    url ="http://127.0.0.1:8000//orders/?byuser="+search_key
-    console.log(url);
+
+    const basePath = window.location.origin;
+    const url = basePath + "/orders/?byuser=" + search_key;
     $("#EmpList").load(url);
 
 
